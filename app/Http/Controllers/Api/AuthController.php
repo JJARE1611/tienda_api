@@ -30,7 +30,7 @@ class AuthController extends Controller
         // 3. Registrar usuario utilizando Query Builder
         $usuarioId = DB::table('usuarios')->insertGetId([
             'nombre' => trim($request->nombre),
-            'email' => strtolower($request->email),
+            'email' => strtolower(trim($request->email)),
             'password' => Hash::make($request->password),
             'rol' => 'usuario',
             'created_at' => now(),
