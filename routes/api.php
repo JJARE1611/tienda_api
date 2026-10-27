@@ -29,3 +29,14 @@ Route::get('/perfil', function (Request $request) {
     ]);
 
 })->middleware('jwt.auth');
+
+Route::get('/admin/prueba', function () {
+
+    return response()->json([
+        'message' => 'Acceso de administrador autorizado'
+    ]);
+
+})->middleware([
+    'jwt.auth',
+    'role:admin'
+]);
