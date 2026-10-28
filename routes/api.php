@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Api\ProductoController;
+use App\Http\Controllers\Api\CompraController;
 
 Route::post('/register', [AuthController::class, 'register']);
 
@@ -45,6 +46,7 @@ Route::get('/admin/prueba', function () {
 Route::middleware('jwt.auth')->group(function () {
     Route::get('/productos', [ProductoController::class, 'index']);
     Route::get('/productos/{id}', [ProductoController::class, 'show']);
+    Route::post('/compras', [CompraController::class, 'store']);
 });
 
 Route::middleware(['jwt.auth', 'role:admin'])->group(function () {
