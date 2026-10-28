@@ -47,6 +47,8 @@ Route::middleware('jwt.auth')->group(function () {
     Route::get('/productos', [ProductoController::class, 'index']);
     Route::get('/productos/{id}', [ProductoController::class, 'show']);
     Route::post('/compras', [CompraController::class, 'store']);
+    Route::get('/compras', [CompraController::class, 'index']);
+    Route::get('/compras/{id}', [CompraController::class, 'show']);
 });
 
 Route::middleware(['jwt.auth', 'role:admin'])->group(function () {
