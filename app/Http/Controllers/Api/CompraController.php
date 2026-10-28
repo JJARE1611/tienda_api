@@ -25,7 +25,6 @@ class CompraController extends Controller
             ], 422);
         }
 
-        // El middleware JWT debe haber autenticado al usuario.
         $usuarioId = Auth::id();
 
         if (!$usuarioId) {
@@ -114,4 +113,56 @@ class CompraController extends Controller
             ], 500);
         }
     }
+    public function index()
+{
+    $usuarioId = \Illuminate\Support\Facades\Auth::id();
+
+    $compras = DB::table('compras')
+        ->where('usuario_id', $usuarioId)
+        ->orderByDesc('fecha')
+        ->get();
+
+    return response()->json([
+        'message' => 'Historial de compras',
+        'compras' => $compras,
+    ]);
+}
+
+public function show($id)
+{
+    $usuarioId = \Illuminate\Support\Facades\Auth::id();
+
+    $compra = DB::table('compras')
+        ->where('id', $id)
+        ->where('usuario_id', $usuarioId)
+        ->first();
+
+    if (!$compra) {
+        return response()->json([
+            'message' => 'Compra no encontrada',
+        ], 404);
+    }
+
+    $detalles = DB::table('detalle_compra')
+        ->join(
+            'productos',
+            'detalle_compra.producto_id',
+            '=',
+            'productos.id'
+        )
+        ->where('detalle_compra.compra_id', $id)
+        ->select(
+            'detalle_compra.producto_id',
+            'productos.nombre',
+            'detalle_compra.cantidad',
+            'detalle_compra.precio'
+        )
+        ->get();
+
+    return response()->json([
+        'message' => 'Detalle de la compra',
+        'compra' => $compra,
+        'productos' => $detalles,
+    ]);
+}
 }
