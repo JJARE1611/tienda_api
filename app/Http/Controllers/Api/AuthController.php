@@ -92,7 +92,6 @@ class AuthController extends Controller
             'exp' => $expiracion,
         ];
 
-        // 6. Generar JWT
         $token = JWT::encode(
             $payload,
             config('jwt.secret'),
