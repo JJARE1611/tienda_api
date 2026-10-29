@@ -22,8 +22,6 @@ return new class extends Migration
                 ->constrained('productos')
                 ->restrictOnDelete();
 
-            $table->unsignedInteger('cantidad');
-
             $table->decimal('precio', 10, 2);
 
             $table->timestamps();

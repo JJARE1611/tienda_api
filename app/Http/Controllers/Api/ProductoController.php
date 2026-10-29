@@ -52,7 +52,7 @@ class ProductoController extends Controller
         $validator = Validator::make($request->all(), [
             'nombre' => 'required|string|max:255',
             'descripcion' => 'nullable|string',
-            'precio' => 'required|numeric|gt:0',
+            'precio' => 'required|numeric|gt:0|max:99999999.99|decimal:0,2',
             'stock' => 'required|integer|min:0'
         ]);
 
@@ -63,13 +63,15 @@ class ProductoController extends Controller
             ], 422);
         }
 
+        $datos = $validator->validated();
+
         $ahora = now();
 
         $id = DB::table('productos')->insertGetId([
-            'nombre' => trim($request->nombre),
-            'descripcion' => $request->descripcion,
-            'precio' => $request->precio,
-            'stock' => $request->stock,
+            'nombre' => trim($datos['nombre']),
+            'descripcion' => $datos['descripcion'] ?? null,
+            'precio' => $datos['precio'],
+            'stock' => $datos['stock'],
             'created_at' => $ahora,
             'updated_at' => $ahora
         ]);
@@ -99,7 +101,7 @@ class ProductoController extends Controller
         $validator = Validator::make($request->all(), [
             'nombre' => 'sometimes|required|string|max:255',
             'descripcion' => 'sometimes|nullable|string',
-            'precio' => 'sometimes|required|numeric|gt:0',
+            'precio' => 'sometimes|required|numeric|gt:0|max:99999999.99|decimal:0,2',
             'stock' => 'sometimes|required|integer|min:0'
         ]);
 
